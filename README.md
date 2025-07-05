@@ -1,2 +1,2 @@
 # simple-projects
-All those projects I made during my school days were super easy ones
+Most of these projects I made during my school days were super easy ones
