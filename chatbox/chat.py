@@ -1,13 +1,6 @@
-
----
-
-### 2. `chat.py`
-
-```python
 import socket
 import threading
 
-BROADCAST_IP = '255.255.255.255'
 PORT = 5005
 
 def get_local_ip():
@@ -33,14 +26,19 @@ def receive():
         if sender_ip != LOCAL_IP:
             print(f"\nFriend ({sender_ip}): {data.decode()}\n> ", end='')
 
-def send():
+def send(friend_ip):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     while True:
         msg = input("> ")
-        sock.sendto(msg.encode(), (BROADCAST_IP, PORT))
+        if msg.strip() == "":
+            continue
+        sock.sendto(msg.encode(), (friend_ip, PORT))
+        print(f"Sent to {friend_ip}: {msg}")
 
 if __name__ == "__main__":
     print(f"Your local IP is: {LOCAL_IP}")
+    friend_ip = input("Enter your friend’s IP address: ").strip()
+    print(f"Chatting with {friend_ip} on port {PORT}...\n")
+
     threading.Thread(target=receive, daemon=True).start()
-    send()
+    send(friend_ip)
